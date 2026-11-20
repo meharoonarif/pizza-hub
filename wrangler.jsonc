@@ -1,0 +1,11 @@
+{
+  // Cloudflare Workers config: serves the static export in ./out (built by `npm run build`).
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "pizza-hub",
+  "compatibility_date": "2026-11-20",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}

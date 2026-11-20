@@ -49,7 +49,12 @@ npm run dev
 ```
 Open http://localhost:3000
 
-## Go live on Cloudflare Pages (free)
+## Go live on Cloudflare (free)
+
+This project deploys as a Cloudflare **Worker with static assets** (see `wrangler.jsonc`).
+Worker build settings: Build command `npm run build`, Deploy command `npx wrangler deploy`.
+
+### Alternative: Cloudflare Pages
 
 The site is a static export (`output: 'export'` in `next.config.mjs`), so it builds into plain files.
 
