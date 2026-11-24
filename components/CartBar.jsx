@@ -9,8 +9,8 @@ import { ArrowRight } from './Icons';
 // Floating "View cart" bar shown while browsing.
 export default function CartBar() {
   const { count, subtotal, ready } = useCart();
-  const pathname = usePathname();
-  if (!ready || count === 0 || ['/cart', '/checkout', '/order-sent'].includes(pathname) || pathname.startsWith('/menu/')) return null;
+  const pathname = (usePathname() || '/').replace(/\/+$/, '') || '/'; // pages end in '/' on the live site
+  if (!ready || count === 0 || ['/cart', '/checkout', '/order-sent'].includes(pathname) || /^\/menu\/./.test(pathname)) return null;
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 md:bottom-6">
       <Link href="/cart" className="pointer-events-auto flex w-full max-w-[520px] items-center justify-between gap-3 rounded-xl bg-black py-2 pl-4 pr-2 text-white shadow-pop md:rounded-full md:pl-6">

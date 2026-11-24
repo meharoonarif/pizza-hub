@@ -11,10 +11,10 @@ import { WhatsAppIcon } from './Icons';
 // On larger screens those bars don't reach the corner, so it stays put.
 export default function WhatsAppButton() {
   const { count, ready } = useCart();
-  const pathname = usePathname();
+  const pathname = (usePathname() || '/').replace(/\/+$/, '') || '/'; // pages end in '/' on the live site
 
-  const pageBar = pathname === '/checkout' || pathname.startsWith('/menu/');
-  const cartBar = ready && count > 0 && !['/cart', '/checkout', '/order-sent'].includes(pathname) && !pathname.startsWith('/menu/');
+  const pageBar = pathname === '/checkout' || /^\/menu\/./.test(pathname);
+  const cartBar = ready && count > 0 && !['/cart', '/checkout', '/order-sent'].includes(pathname) && !/^\/menu\/./.test(pathname);
   const position = pageBar ? 'bottom-[112px] lg:bottom-6' : cartBar ? 'bottom-[88px] md:bottom-6' : 'bottom-5 md:bottom-6';
 
   return (

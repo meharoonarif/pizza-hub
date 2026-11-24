@@ -24,7 +24,7 @@ const Contact = ({ icon, label, children }) => (
 
 export default function Footer() {
   return (
-    <footer className="overflow-hidden bg-brand text-white">
+    <footer className="overflow-hidden overflow-hidden bg-brand text-white">
       <div className="mx-auto max-w-[1440px] px-4 pt-7 md:px-16 md:pt-14">
         {/* CTA band */}
         <div className="relative isolate flex flex-col items-start justify-between gap-4 overflow-hidden rounded-[16px] bg-sun p-6 text-black md:flex-row md:items-center md:rounded-[20px] md:p-12">
@@ -80,7 +80,7 @@ export default function Footer() {
             <Link href="/about">About</Link>
           </div>
         </div>
-        <p aria-hidden="true" className="select-none text-center text-[92px] font-bold leading-[0.8] tracking-tighter text-white/[0.07] md:text-[290px]">PIZZA HUB</p>
+        <p aria-hidden="true" className="select-none overflow-hidden whitespace-nowrap text-center text-[19vw] font-bold leading-[0.8] tracking-tighter text-white/[0.07] md:text-[min(290px,19vw)]">PIZZA HUB</p>
       </div>
     </footer>
   );

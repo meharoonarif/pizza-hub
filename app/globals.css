@@ -9,3 +9,6 @@ body { @apply bg-white text-black antialiased; }
 .no-scrollbar { scrollbar-width: none; }
 details > summary { list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
+
+/* Never let the page scroll sideways on phones (clip keeps sticky header working) */
+html, body { max-width: 100%; overflow-x: clip; }
