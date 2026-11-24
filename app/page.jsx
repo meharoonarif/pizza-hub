@@ -22,9 +22,12 @@ export default function HomePage() {
             const items = MENU.filter((m) => m.category === c.id);
             return (
               <section key={c.id} id={c.id} className="scroll-mt-[200px] md:scroll-mt-[180px]">
-                <div className="mb-5 flex items-center justify-between">
-                  <h2 className="flex items-center gap-3 text-[22px] font-bold md:text-[30px]">{c.name}<span className="rounded-full bg-brand/10 px-2.5 py-0.5 text-xs font-semibold text-brand">{items.length} items</span></h2>
-                  <Link href={`/menu#${c.id}`} className="flex items-center gap-1 text-sm font-semibold text-brand">View All <ArrowRight size={14} /></Link>
+                <div className="mb-5 flex items-center justify-between gap-3">
+                  <h2 className="flex min-w-0 items-center gap-2 text-[20px] font-bold leading-tight min-[380px]:text-[22px] md:gap-3 md:text-[30px]">
+                    <span className="truncate">{c.name}</span>
+                    <span className="shrink-0 whitespace-nowrap rounded-full bg-brand/10 px-2.5 py-0.5 text-xs font-semibold text-brand">{items.length} {items.length === 1 ? 'item' : 'items'}</span>
+                  </h2>
+                  <Link href={`/menu#${c.id}`} className="flex shrink-0 items-center gap-1 whitespace-nowrap text-sm font-semibold text-brand">View All <ArrowRight size={14} /></Link>
                 </div>
                 <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
                   {items.map((item) => <ProductCard key={item.slug} item={item} />)}

@@ -63,7 +63,7 @@ export default function CheckoutPage() {
   const cart = useCart();
   const { ready, items, prefs, setOrderType, unitPrice, count, subtotal, deliveryFee, total, saveOrder, clear } = cart;
   const [open, setOpen] = useState(true);
-  const [f, setF] = useState({ name: '', phone: '', address: '', payment: PAYMENTS[0].title, notes: '' });
+  const [f, setF] = useState({ name: '', phone: '', address: '', addressByCall: false, payment: PAYMENTS[0].title, notes: '' });
   const [error, setError] = useState('');
   const [touched, setTouched] = useState({});
   const touch = (k) => setTouched((t) => ({ ...t, [k]: true }));
@@ -93,7 +93,7 @@ export default function CheckoutPage() {
   const errors = {
     name: nameError(f.name),
     phone: phoneError(f.phone),
-    address: orderType === 'delivery' ? addressError(f.address) : '',
+    address: orderType === 'delivery' && !f.addressByCall ? addressError(f.address) : '',
   };
   const show = (k) => touched[k] && errors[k];
 
@@ -107,10 +107,10 @@ export default function CheckoutPage() {
       return;
     }
     setError('');
-    const details = { ...f, phone: formatPhone(normalizePhone(f.phone)), name: f.name.trim(), address: f.address.trim() };
+    const details = { ...f, phone: formatPhone(normalizePhone(f.phone)), name: f.name.trim(), address: f.addressByCall ? '' : f.address.trim() };
     const orderId = 'PH-' + String(Date.now()).slice(-6);
     const message = buildOrderMessage({ orderId, items, unitPrice, subtotal, deliveryFee, total, form: { ...details, orderType } });
-    try { localStorage.setItem(DETAILS_KEY, JSON.stringify({ name: details.name, phone: details.phone, address: details.address })); } catch {}
+    try { localStorage.setItem(DETAILS_KEY, JSON.stringify({ name: details.name, phone: details.phone, address: f.addressByCall ? f.address : details.address })); } catch {}
     saveOrder({ id: orderId, date: new Date().toISOString(), items, total, orderType, message });
     const url = waLink(SITE.whatsapp, message);
     window.open(url, '_blank');
@@ -146,8 +146,18 @@ export default function CheckoutPage() {
                   <FieldError id="co-phone-err" msg={show('phone')} hint="We’ll confirm your order on this number." /></label>
               </div>
               {orderType === 'delivery' && (
-                <label className="mt-4 flex flex-col gap-2 text-[13px] font-semibold">Delivery address *<textarea id="co-address" className={`min-h-[88px] rounded-xl bg-soft p-4 text-[15px] font-normal outline-none ring-brand focus:ring-2 ${show('address') ? errCls : ''}`} value={f.address} onChange={(e) => set('address', e.target.value)} onBlur={() => touch('address')} placeholder="House no., street, block/area, nearest landmark (e.g. House 12, Street 4, Amar Sidhu, near Shanghai Bridge)" autoComplete="street-address" aria-invalid={!!show('address')} aria-describedby="co-address-err" />
-                  <FieldError id="co-address-err" msg={show('address')} hint="Include house no., street and area so our rider can find you." /></label>
+                <div className="mt-4 flex flex-col gap-2">
+                  <label htmlFor="co-address" className={`text-[13px] font-semibold ${f.addressByCall ? 'text-muted' : ''}`}>Delivery address {f.addressByCall ? '' : '*'}</label>
+                  <textarea id="co-address" disabled={f.addressByCall} className={`min-h-[88px] rounded-xl bg-soft p-4 text-[15px] font-normal outline-none ring-brand transition focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${show('address') ? errCls : ''}`} value={f.addressByCall ? '' : f.address} onChange={(e) => set('address', e.target.value)} onBlur={() => touch('address')} placeholder={f.addressByCall ? 'We’ll take your address when we call you' : 'House no., street, block/area, nearest landmark (e.g. House 12, Street 4, Amar Sidhu, near Shanghai Bridge)'} autoComplete="street-address" aria-invalid={!!show('address')} aria-describedby="co-address-err" />
+                  {!f.addressByCall && <FieldError id="co-address-err" msg={show('address')} hint="Include house no., street and area so our rider can find you." />}
+                  <label className={`mt-1 flex cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-3 transition ${f.addressByCall ? 'border-sun bg-[#FFF8E1]' : 'border-line hover:border-black'}`}>
+                    <input type="checkbox" className="h-5 w-5 shrink-0 accent-[#007545]" checked={f.addressByCall} onChange={(e) => setF((p) => ({ ...p, addressByCall: e.target.checked }))} />
+                    <span className="flex flex-col">
+                      <span className="text-[14px] font-semibold">Share address over call</span>
+                      <span className="text-xs font-normal text-muted">We’ll call you on your number to get the address.</span>
+                    </span>
+                  </label>
+                </div>
               )}
             </Section>
 

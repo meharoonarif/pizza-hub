@@ -3,6 +3,7 @@ import './globals.css';
 import { CartProvider } from '@/lib/cart';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import FooterGate from '@/components/FooterGate';
 import StatusBar from '@/components/StatusBar';
 import CartBar from '@/components/CartBar';
 import WhatsAppButton from '@/components/WhatsAppButton';
@@ -31,7 +32,7 @@ export default function RootLayout({ children }) {
           <StatusBar />
           <Header />
           <main>{children}</main>
-          <Footer />
+          <FooterGate><Footer /></FooterGate>
           <CartBar />
           <WhatsAppButton />
           <OrderTypeModal />

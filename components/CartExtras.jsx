@@ -1,18 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { EXTRAS, formatPrice } from '@/lib/data';
+import { extrasForSize, formatPrice } from '@/lib/data';
 import { CheckIcon } from './Icons';
 
 // "Add Extras" for one cart line: a toggle that opens a row of tap-on chips.
 // Extras apply to every pizza in that line (e.g. qty 2 → both get extra cheese).
 export default function CartExtras({ line, onChange }) {
+  const options = extrasForSize(line.size); // prices for this line's size
   const chosen = (line.extras || []).map((e) => e.id);
   const [open, setOpen] = useState(false);
 
   const toggle = (id) => {
     const next = chosen.includes(id) ? chosen.filter((x) => x !== id) : [...chosen, id];
-    onChange(EXTRAS.filter((e) => next.includes(e.id)));
+    onChange(options.filter((e) => next.includes(e.id)));
   };
 
   return (
@@ -26,7 +27,7 @@ export default function CartExtras({ line, onChange }) {
         <div className="mt-3 rounded-xl bg-soft p-3">
           {line.qty > 1 && <p className="mb-2 text-[11px] font-medium text-muted md:text-xs">Added to all {line.qty} pizzas in this line.</p>}
           <div className="flex flex-wrap gap-2">
-            {EXTRAS.map((e) => {
+            {options.map((e) => {
               const on = chosen.includes(e.id);
               return (
                 <button key={e.id} type="button" onClick={() => toggle(e.id)} aria-pressed={on}

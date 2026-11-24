@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useCart } from '@/lib/cart';
 import { SITE } from '@/lib/data';
-import { BagIcon, BikeIcon, CartIcon, ChevronDown, PizzaMenuIcon, SearchIcon } from './Icons';
+import { BagIcon, BikeIcon, CartIcon, ChevronDown, CloseIcon, PizzaMenuIcon, SearchIcon } from './Icons';
 import MenuPopup from './MenuPopup';
 
 // Floating header card.
@@ -43,7 +43,13 @@ export default function Header() {
   const searchBox = (cls, withKbd) => (
     <form onSubmit={submit} role="search" className={`items-center gap-3 rounded-full bg-soft pl-5 pr-3 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-brand ${cls}`}>
       <SearchIcon size={20} className="shrink-0 text-muted" />
-      <input ref={withKbd ? searchRef : undefined} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search pizzas, pasta, flavours…" className="h-full min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-[#8E8E88] md:text-base" aria-label="Search menu" />
+      <input type="search" ref={withKbd ? searchRef : undefined} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search pizzas, pasta, flavours…" className="h-full min-w-0 flex-1 bg-transparent text-[15px] outline-none placeholder:text-[#8E8E88] md:text-base" aria-label="Search menu" />
+      {q && (
+        <button type="button" data-no-gate onClick={(e) => { setQ(''); e.currentTarget.parentElement.querySelector('input')?.focus(); }} aria-label="Clear search"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#E4E6E0] text-black transition hover:bg-black hover:text-white">
+          <CloseIcon size={14} />
+        </button>
+      )}
       {withKbd && (
         <span className="hidden shrink-0 items-center gap-1 lg:flex" aria-hidden="true">
           <kbd className="grid h-7 min-w-7 place-items-center rounded-md border border-line bg-white px-1.5 text-[11px] font-semibold text-muted">{isMac ? '⌘' : 'Ctrl'}</kbd>

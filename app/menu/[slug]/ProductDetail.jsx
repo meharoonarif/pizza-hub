@@ -23,7 +23,7 @@ export default function ProductDetail({ slug }) {
 
   const sizeObj = item.sizes.find((s) => s.name === size);
   const showExtras = false; // extras are chosen on the cart page
-  const chosenExtras = EXTRAS.filter((e) => extras.includes(e.id));
+  const chosenExtras = []; // extras are added on the cart page
   const unit = sizeObj.price + chosenExtras.reduce((s, e) => s + e.price, 0);
   const total = unit * qty;
   const category = CATEGORIES.find((c) => c.id === item.category);

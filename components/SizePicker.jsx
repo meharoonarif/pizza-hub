@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useScrollLock } from '@/lib/scrollLock';
 import { useCart } from '@/lib/cart';
 import { formatPrice } from '@/lib/data';
 import { CheckIcon, CloseIcon } from './Icons';
@@ -13,6 +14,7 @@ export default function SizePicker({ item, open, onClose }) {
   const { addItem } = useCart();
   const [qtys, setQtys] = useState({});
   const [added, setAdded] = useState(false);
+  useScrollLock(open);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -20,9 +22,7 @@ export default function SizePicker({ item, open, onClose }) {
     setAdded(false);
     const onKey = (e) => e.key === 'Escape' && onClose();
     document.addEventListener('keydown', onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
+    return () => document.removeEventListener('keydown', onKey);
   }, [open, item, onClose]);
 
   if (!open || typeof document === 'undefined') return null;
@@ -41,7 +41,7 @@ export default function SizePicker({ item, open, onClose }) {
   // Rendered into <body> so the tile's hover lift can't trap the fixed popup
   return createPortal(
     <div className="fixed inset-0 z-[75] flex items-end justify-center bg-black/50 md:items-center md:p-6" role="dialog" aria-modal="true" aria-labelledby={`sp-${item.slug}`} onClick={onClose}>
-      <div className="max-h-[90vh] w-full max-w-[480px] overflow-y-auto rounded-t-[18px] bg-white p-5 md:rounded-[20px] md:p-7" onClick={(e) => e.stopPropagation()}>
+      <div className="max-h-[90vh] w-full max-w-[480px] overflow-y-auto overscroll-contain rounded-t-[18px] bg-white p-5 md:rounded-[20px] md:p-7" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start gap-4">
           <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#FFF8E1]"><ProductImage item={item} className="h-full w-full object-contain p-1" /></div>
           <div className="min-w-0 flex-1">

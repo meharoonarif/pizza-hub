@@ -6,7 +6,7 @@ import Steps from '@/components/Steps';
 import CartExtras from '@/components/CartExtras';
 import { ArrowRight, ClockIcon } from '@/components/Icons';
 import { useCart } from '@/lib/cart';
-import { EXTRAS, MENU, SITE, formatPrice, getItem } from '@/lib/data';
+import { MENU, SITE, extrasForSize, formatPrice, getItem } from '@/lib/data';
 
 const UPSELL = ['chicken-fajita', 'grilled-pasta', 'peri-peri'];
 
@@ -69,7 +69,7 @@ export default function CartPage() {
                     <button onClick={() => setQty(l.id, l.qty + 1)} className="h-9 w-9 rounded-lg bg-brand text-lg font-bold text-white" aria-label="Increase">+</button>
                   </div>
                 </div>
-                {getItem(l.slug)?.category !== 'pasta' && EXTRAS.length > 0 && (
+                {getItem(l.slug)?.category !== 'pasta' && extrasForSize(l.size).length > 0 && (
                   <div className="pl-[84px] md:pl-[116px]"><CartExtras line={l} onChange={(ex) => setLineExtras(l.id, ex)} /></div>
                 )}
                 </div>

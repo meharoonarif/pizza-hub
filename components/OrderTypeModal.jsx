@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useCart } from '@/lib/cart';
+import { useScrollLock } from '@/lib/scrollLock';
 import { ArrowRight, BagIcon, BikeIcon, ClockIcon, CloseIcon } from './Icons';
 
 const SEEN_KEY = 'pizzahub_ordertype_seen';
@@ -15,6 +16,7 @@ export default function OrderTypeModal() {
   const [show, setShow] = useState(false);
   const pending = useRef(null);
   const seen = useRef(true);
+  useScrollLock(show);
 
   useEffect(() => {
     try { seen.current = sessionStorage.getItem(SEEN_KEY) === '1'; } catch { seen.current = true; }

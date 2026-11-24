@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import { Breadcrumb } from '@/components/ui';
-import { SearchIcon } from '@/components/Icons';
+import { CloseIcon, SearchIcon } from '@/components/Icons';
 import { CATEGORIES, MENU, SITE, fromPrice } from '@/lib/data';
 
 const PRICE = [
@@ -40,7 +40,13 @@ export default function MenuBrowser() {
           </div>
           <label className="flex h-[52px] w-full items-center gap-2.5 rounded-xl border border-line bg-white px-4 md:w-[420px]">
             <SearchIcon className="text-brand" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search pizzas, pasta…" className="w-full bg-transparent outline-none" aria-label="Search menu" />
+            <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search pizzas, pasta…" className="min-w-0 flex-1 bg-transparent outline-none" aria-label="Search menu" />
+            {q && (
+        <button type="button" data-no-gate onClick={(e) => { e.preventDefault(); setQ(''); e.currentTarget.parentElement.querySelector('input')?.focus(); }} aria-label="Clear search"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#E4E6E0] text-black transition hover:bg-black hover:text-white">
+          <CloseIcon size={14} />
+        </button>
+      )}
           </label>
         </div>
       </div>
